@@ -42,26 +42,26 @@ app.get('/genres/:id/stats', (req, res) => {
 });
 
 app.post('/playlists', (req, res) => {
-    const {name} = req.body;
+    const { name } = req.body;
     const stmt = db.prepare(
-        "INSERT INTO Playlist (Name) VALUES (?)" 
+        "INSERT INTO Playlist (Name) VALUES (?)"
     );
     const result = stmt.run(name);
-    res.status(201).json({id: Number(result.lastInsertRowid), name: name});
+    res.status(201).json({ id: Number(result.lastInsertRowid), name: name });
 });
 
 app.delete('/playlists/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const stmt = db.prepare(
-        "DELETE FROM Playlist WHERE PlaylistId = ?" 
+        "DELETE FROM Playlist WHERE PlaylistId = ?"
     );
     const result = stmt.run(id);
-    
-    if (result === 0){
-        return res.status(404).json({error: "Playlist not found"});
+
+    if (result.changes === 0) {
+        return res.status(404).json({ error: "Playlist not found" });
     }
 
-    res.json({message: "Playlist deleted"});
+    res.json({ message: "Playlist deleted" });
 });
 
 app.listen(3000, () => {
